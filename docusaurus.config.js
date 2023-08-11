@@ -1,8 +1,8 @@
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'Rancher',
-  tagline: '',
+  title: 'Enterprise Kubernetes Management',
+  tagline: 'Learn all about how Rancher lets you deliver Kubernetes-as-a-Service from datacenter to cloud to edge.',
   url: 'https://ranchermanager.docs.rancher.com/',
   baseUrl: '/',
   onBrokenLinks: 'warn',

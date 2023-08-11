@@ -1,5 +1,5 @@
 ---
-slug: /
+slug: /intro
 title: "What is Rancher?"
 sidebar_label: What is Rancher?
 description: "Rancher adds significant value on top of Kubernetes: managing hundreds of clusters from one interface, centralizing RBAC, enabling monitoring and alerting. Read more."
