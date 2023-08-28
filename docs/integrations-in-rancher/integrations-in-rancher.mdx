@@ -1,0 +1,50 @@
+---
+title: Integrations in Rancher
+---
+import {Card, CardSection} from '@site/src/components/CardComponents';
+import {
+  ReadingModeMobileRegular, 
+  QuestionRegular, 
+  ArrowUpRegular,
+  PlayRegular,
+  FlowchartRegular,
+  RocketRegular
+} from '@fluentui/react-icons';
+import { FaAws, FaGoogle, FaCloud, FaServer, faGear } from "react-icons/fa6";
+import HarvesterIcon from '@site/static/img/harvester_logo_horizontal.svg';
+
+<CardSection
+    id="Gettingstarted"
+    icon={<RocketRegular />}
+>
+    <Card
+        title="Virtualization Management with Harvester"
+        to="/integrations-in-rancher/harvester"
+        description="Understand what Rancher is and is not"
+    />
+    <Card
+        title="Epinio Application Engine"
+        to="https://docs.epinio.io/howtos/install_epinio_on_rancher"
+        description="Learn about the core capabilities"
+    />
+    <Card
+        title="Continous Delivery with Fleet"
+        to="/pages-for-subheaders/fleet-gitops-at-scale"
+        description="Learn about high level concepts, architectural elements of Rancher"
+    />
+    <Card
+        title="Security with NeuVector"
+        to="/integrations-in-rancher/neuvector"
+        description="Quick way to helm install Rancher in a Kubernetes cluster"
+    />
+    <Card
+        title="Observability with Opni"
+        to="https://opni.io/"
+        description="Deploy a sample workload"
+    />
+    <Card
+        title="Policy Management with Kubewarden"
+        to="/integrations-in-rancher/rancher-extensions"
+        description="Deploy a sample workload"
+    />
+</CardSection>

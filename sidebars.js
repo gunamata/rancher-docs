@@ -1122,6 +1122,10 @@ const sidebars = {
     {
       type: 'category',
       label: 'Integrations in Rancher',
+      link: {
+        type: 'doc',
+        id: "integrations-in-rancher/integrations-in-rancher"
+      },
       items: [
         {
           type: 'category',

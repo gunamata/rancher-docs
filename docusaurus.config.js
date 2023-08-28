@@ -1,5 +1,7 @@
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
+const tailwindPlugin = require('./plugins/tailwind-plugin.cjs');
+
 module.exports = {
   title: 'Enterprise Kubernetes Management',
   tagline: 'Learn all about how Rancher lets you deliver Kubernetes-as-a-Service from datacenter to cloud to edge.',
@@ -161,6 +163,7 @@ module.exports = {
     ],
   ],
   plugins: [
+   tailwindPlugin,
    [
       '@docusaurus/plugin-client-redirects',
       {
