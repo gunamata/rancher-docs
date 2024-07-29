@@ -1,0 +1,93 @@
+name: Create Docs Localization PR
+
+on:
+  pull_request_target:
+    types:
+      - closed
+
+jobs:
+  translate_docs:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == github.event.repository.default_branch
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Get list of changed files
+        id: changed-files
+        run: |
+          pr_number=${{ github.event.pull_request.number }}
+          files=$(gh pr view $pr_number --json files --jq '.files[].path')
+          echo "files=$files" >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create new branch
+        id: create-branch
+        run: |
+          git config --global user.name "docs-localization[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          pr_number=${{ github.event.pull_request.number }}
+          new_branch="localize-${pr_number}"
+          echo "new_branch=$new_branch" >> $GITHUB_ENV
+          git checkout -b $new_branch
+
+      - name: Call translation API and update translations
+        env:
+          TRANSLATION_API_URL: ${{ secrets.TRANSLATION_API_URL }}
+        run: |
+          declare -A languages=(["zh"]="Chinese")
+          repo_url="https://raw.githubusercontent.com/${{ github.repository }}"
+          head_sha=${{ github.event.pull_request.head.sha }}
+          files=${{ env.files }}
+          IFS=$'\n'
+          for lang_short in "${!languages[@]}"; do
+            for file in $files; do
+              if [[ $file == docs/* ]] || [[ $file == versioned_docs/* ]]; then
+                file_url="${repo_url}/${head_sha}/${file}"
+                echo "Calling the Translation API for $file_url"
+                payload=$(jq -n --arg url "$file_url" --arg target "${languages[$lang_short]}" '{"source": "english", "target": $target, "content_url": $url}')
+                response=$(curl -s -X POST "$TRANSLATION_API_URL" -d "$payload" -H "Content-Type: application/json" -H "Authorization: Bearer ${{ secrets.TRANSLATION_API_KEY }}")
+                if [ $? -ne 0 ]; then
+                  echo "Error calling Translation API"
+                  continue
+                fi
+                translated_content=$(echo $response | jq -r '.translated_document')
+                if [ -z "$translated_content" ]; then
+                  echo "Translation API returned empty content for $file_url"
+                  continue
+                fi
+
+                if [[ $file == docs/* ]]; then
+                  translated_path="i18n/$lang_short/docusaurus-plugin-content-docs/current/${file#docs/}"
+                elif [[ $file == versioned_docs/* ]]; then
+                  version=$(echo $file | cut -d'/' -f2)
+                  translated_path="i18n/$lang_short/docusaurus-plugin-content-docs/$version/${file#versioned_docs/$version/}"
+                fi
+
+                mkdir -p "$(dirname "$translated_path")"
+                echo "$translated_content" > "$translated_path"
+                echo "Translated content saved to $translated_path"
+              fi
+            done
+          done
+
+      - name: Commit and push changes
+        run: |
+          pr_number=${{ github.event.pull_request.number }}
+          git add .
+          git commit -m "Localize PR-${pr_number}"
+          git push origin ${{ env.new_branch }}
+
+      - name: Create a pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.PR_CREATE_TOKEN }}
+          base: ${{ env.new_branch }}
+          title: "Localize PR-${{ github.event.pull_request.number }}"
+          body: "This PR applies localization for files updated in the PR #${{ github.event.pull_request.number }}."
+          branch: main
+          
