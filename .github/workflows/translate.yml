@@ -5,6 +5,10 @@ on:
     types:
       - closed
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   translate_docs:
     runs-on: ubuntu-latest
@@ -87,7 +91,6 @@ jobs:
       - name: Create a pull request
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.PR_CREATE_TOKEN }}
           base: ${{ env.new_branch }}
           title: "Localize PR-${{ github.event.pull_request.number }}"
           body: "This PR applies localization for files updated in the PR #${{ github.event.pull_request.number }}."
