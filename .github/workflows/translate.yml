@@ -54,6 +54,7 @@ jobs:
                 echo $payload
                 echo $TRANSLATION_API_URL
                 response = $(curl -X POST -H "X-API-KEY: ${{ secrets.TRANSLATION_API_KEY }}" -H "Content-Type: application/json" -d '"$payload"' "$TRANSLATION_API_URL")
+                echo $response
                 if [ $? -ne 0 ]; then
                   echo "Error calling Translation API"
                   continue
