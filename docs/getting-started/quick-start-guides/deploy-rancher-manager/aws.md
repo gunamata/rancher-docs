@@ -11,7 +11,7 @@ The following steps will quickly deploy a Rancher server on AWS in a single-node
 
 :::note
 
-workflow testing
+translation workflow testing
 
 :::
 
