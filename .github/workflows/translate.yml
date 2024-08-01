@@ -39,6 +39,7 @@ jobs:
       - name: Call translation API and update translations
         env:
           TRANSLATION_API_URL: ${{ secrets.TRANSLATION_API_URL }}
+          TRANSLATION_API_KEY: ${{ secrets.TRANSLATION_API_KEY }}
         run: |
           declare -A languages=(["zh"]="Chinese")
           repo_url="https://raw.githubusercontent.com/${{ github.repository }}"
@@ -53,7 +54,10 @@ jobs:
                 payload=$(jq -n --arg url "$file_url" --arg target "${languages[$lang_short]}" '{"source": "english", "target": $target, "source_url": $url}')
                 echo $payload
                 echo $TRANSLATION_API_URL
-                response = $(curl -X POST -H "X-API-KEY: ${{ secrets.TRANSLATION_API_KEY }}" -H "Content-Type: application/json" -d "$payload" $TRANSLATION_API_URL)
+                response = $(curl -s -X POST "$TRANSLATION_API_URL" \
+                            -H "Content-Type: application/json" \
+                            -H "X-API-KEY: $TRANSLATION_API_KEY" \
+                            -d "$payload")
                 echo $response
                 if [ $? -ne 0 ]; then
                   echo "Error calling Translation API"
