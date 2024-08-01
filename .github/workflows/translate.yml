@@ -90,7 +90,7 @@ jobs:
 
       - name: Create a pull request
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PR_CREATE_TOKEN }}
         run: |
           echo "File a PR"
           pr_number=${{ github.event.pull_request.number }}
