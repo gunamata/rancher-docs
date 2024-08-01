@@ -82,6 +82,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo "Commit and Push step"
           pr_number=${{ github.event.pull_request.number }}
           git add .
           git commit -m "Localize PR-${pr_number}"
@@ -91,6 +92,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo "File a PR"
           pr_number=${{ github.event.pull_request.number }}
           gh pr create \
             --title "Localize PR-${pr_number}" \
