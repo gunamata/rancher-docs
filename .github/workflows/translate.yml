@@ -50,7 +50,7 @@ jobs:
               if [[ $file == docs/* ]] || [[ $file == versioned_docs/* ]]; then
                 file_url="${repo_url}/${head_sha}/${file}"
                 echo "Calling the Translation API for $file_url"
-                payload=$(jq -n --arg url "$file_url" --arg target "${languages[$lang_short]}" '{"source": "english", "target": $target, "content_url": $url}')
+                payload=$(jq -n --arg url "$file_url" --arg target "${languages[$lang_short]}" '{"source": "english", "target": $target, "source_url": $url}')
                 echo $payload
                 echo $TRANSLATION_API_URL
                 response=$(curl -s -X POST "$TRANSLATION_API_URL" -d "$payload" -H "Content-Type: application/json" -H "Authorization: Bearer ${{ secrets.TRANSLATION_API_KEY }}")
