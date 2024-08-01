@@ -53,12 +53,12 @@ jobs:
                 payload=$(jq -n --arg url "$file_url" --arg target "${languages[$lang_short]}" '{"source": "english", "target": $target, "source_url": $url}')
                 echo $payload
                 echo $TRANSLATION_API_URL
-                response=$(curl -s -X POST "$TRANSLATION_API_URL" -d "$payload" -H "Content-Type: application/json" -H "Authorization: Bearer ${{ secrets.TRANSLATION_API_KEY }}")
+                response = $(curl -X POST -H "X-API-KEY: ${{ secrets.TRANSLATION_API_KEY }}" -H "Content-Type: application/json" -d '"$payload"' "$TRANSLATION_API_URL")
                 if [ $? -ne 0 ]; then
                   echo "Error calling Translation API"
                   continue
                 fi
-                translated_content=$(echo $response | jq -r '.translated_document')
+                translated_content=$(echo $response | jq -r '.response.translated_document')
                 if [ -z "$translated_content" ]; then
                   echo "Translation API returned empty content for $file_url"
                   continue
