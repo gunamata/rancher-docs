@@ -53,10 +53,10 @@ jobs:
                 echo "Calling the Translation API for $file_url"
                 payload=$(jq -n --arg url "$file_url" --arg target "${languages[$lang_short]}" '{"source": "english", "target": $target, "source_url": $url}')
                 echo '$payload'
-                response = $(curl -s -X POST "$TRANSLATION_API_URL" \
+                response=$(curl -s -X POST "$TRANSLATION_API_URL" \
                             -H "Content-Type: application/json" \
                             -H "X-API-KEY: $TRANSLATION_API_KEY" \
-                            -d '$payload' \
+                            -d "$payload" \
                             --trace-ascii /dev/stdout)
                 echo $response
                 if [ $? -ne 0 ]; then
