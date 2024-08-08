@@ -62,7 +62,7 @@ jobs:
                   echo "Error calling Translation API"
                   continue
                 fi
-                translated_content="Test message"
+                translated_document=$(echo "$response" | grep -oP '(?<="translated_document":")[^"]*')
                 if [ -z "$translated_content" ]; then
                   echo "Translation API returned empty content for $file_url"
                   continue
