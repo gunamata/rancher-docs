@@ -9,6 +9,10 @@ description: Read this step by step Rancher AWS guide to quickly deploy a Ranche
 
 The following steps will quickly deploy a Rancher server on AWS in a single-node K3s Kubernetes cluster, with a single-node downstream Kubernetes cluster attached.
 
+:::note
+workflow testing
+:::
+
 :::caution
 
 The intent of these guides is to quickly launch a sandbox that you can use to evaluate Rancher. These guides are not intended for production environments. For comprehensive setup instructions, see [Installation](../../installation-and-upgrade/installation-and-upgrade.md).
